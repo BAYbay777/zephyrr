@@ -84,34 +84,34 @@
         }
 
         /* --- WADAH EMBED CANVA (RESPONSIF TINGGI) --- */
-        .canva-wrapper {
-            max-width: 900px;
-            width: 90%;
-            margin: 20px auto 60px auto;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            border-radius: 16px;
-            overflow: hidden;
-            background: white;
-            border: 1px solid var(--border-color);
-        }
+        /* --- PERBAIKAN WADAH EMBED CANVA WIDESCREEN --- */
+.canva-wrapper {
+    max-width: 1200px; /* Diperlebar agar presentasi terlihat besar dan jelas */
+    width: 95%;
+    margin: 20px auto 60px auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    overflow: hidden;
+    background: white;
+    border: 1px solid var(--border-color);
+}
 
-        .canva-container {
-            position: relative;
-            width: 100%;
-            height: 0;
-            /* Rasio aspek tinggi khusus untuk dokumen infografis/materi panjang Canva */
-            padding-top: 142%; 
-        }
+.canva-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    /* UBAH KE 56.25% (Rasio 16:9 standar presentasi Canva agar pas luar dalam) */
+    padding-top: 56.25%; 
+}
 
-        .canva-container iframe {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            border: none;
-        }
-
+.canva-container iframe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border: none;
+}
         /* Responsif Layar Kecil (HP) */
         @media (max-width: 600px) {
             .page-title {
