@@ -10,7 +10,6 @@
         /* --- TEMA UTAMA: ANGIN LEMBUT (SOFT BREEZE) --- */
         :root {
             --bg-gradient: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 100%);
-            --card-bg: rgba(255, 255, 255, 0.85);
             --text-main: #334155;
             --text-muted: #64748b;
             --border-color: #e2e8f0;
@@ -73,23 +72,35 @@
             color: #0284c7;
         }
 
-        /* --- PEMBUNGKUS EMBED CANVA --- */
+        /* --- JUDUL HALAMAN --- */
+        .page-title {
+            text-align: center;
+            font-size: 56px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 50px;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+
+        /* --- WADAH EMBED CANVA (RESPONSIF TINGGI) --- */
         .canva-wrapper {
             max-width: 900px;
-            width: 95%;
-            margin: 30px auto 50px auto;
-            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
-            border-radius: 12px;
+            width: 90%;
+            margin: 20px auto 60px auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border-radius: 16px;
             overflow: hidden;
             background: white;
+            border: 1px solid var(--border-color);
         }
 
         .canva-container {
             position: relative;
             width: 100%;
             height: 0;
-            /* Mengatur rasio agar pas dengan dokumen panjang Canva milikmu */
-            padding-top: 140%; 
+            /* Rasio aspek tinggi khusus untuk dokumen infografis/materi panjang Canva */
+            padding-top: 142%; 
         }
 
         .canva-container iframe {
@@ -100,6 +111,17 @@
             left: 0;
             border: none;
         }
+
+        /* Responsif Layar Kecil (HP) */
+        @media (max-width: 600px) {
+            .page-title {
+                font-size: 40px;
+                margin-top: 30px;
+            }
+            nav {
+                padding: 15px 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -108,10 +130,12 @@
         <div class="logo">ZEPHYR</div>
         <ul>
             <li><a href="index.html">home</a></li>
-            <li><a href="design.html">design</a></li>
-            <li><a href="product.html">product</a></li>
+            <li><a href="design.html" class="active">design</a></li>
+            <li><a href="Product.html">product</a></li>
         </ul>
     </nav>
+
+    <h1 class="page-title">DESIGN</h1>
 
     <div class="canva-wrapper">
         <div class="canva-container">
@@ -119,6 +143,13 @@
             </iframe>
         </div>
     </div>
+    <div style="position: relative; width: 100%; height: 0; padding-top: 393.5578%;
+ padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;
+ border-radius: 8px; will-change: transform;">
+  <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;"
+    src="https://www.canva.com/design/DAHLnZQcr20/QRCD5ViXkZuGKs31QrTvzw/view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
+  </iframe>
+</div>
 
 </body>
 </html>
