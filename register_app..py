@@ -84,24 +84,53 @@ tab_login, tab_register = st.tabs(["🔒 Masuk (Login)", "📝 Daftar (Register)
 # ==================== 1. HALAMAN LOGIN ====================
 with tab_login:
     st.subheader("Masuk ke Workspace")
-    with st.form(key='login_form'):
-        login_user = st.text_input("Username", placeholder="Masukkan username kamu")
-        login_pass = st.text_input("Password", type="password", placeholder="Masukkan password")
-        login_submit = st.form_submit_button(label='Masuk Sekarang')
-        
-    if login_submit:
-        user_valid = check_user(login_user.strip(), login_pass)
-        if user_valid:
-            st.success(f"🎉 Selamat datang kembali, **{login_user}**! Mengalihkan ke Workspace...")
-            # JavaScript redirect untuk langsung otomatis memindahkan halaman iframe luar ke product.html
-            st.markdown("""
-                <script>
-                    window.top.location.href = "product.html";
-                </script>
-            """, unsafe_allow_html=True)
-        else:
-            st.error("❌ Username atau Password salah! Silakan periksa kembali.")
+    
+    # Inisialisasi session state untuk mendeteksi status login sukses
+    if "login_success" not in st.session_state:
+        st.session_state.login_success = False
 
+    if not st.session_state.login_success:
+        with st.form(key='login_form'):
+            login_user = st.text_input("Username", placeholder="Masukkan username kamu")
+            login_pass = st.text_input("Password", type="password", placeholder="Masukkan password")
+            login_submit = st.form_submit_button(label='Masuk Sekarang')
+            
+        if login_submit:
+            user_valid = check_user(login_user.strip(), login_pass)
+            if user_valid:
+                st.session_state.login_success = True
+                st.rerun()  # Segarkan halaman untuk memunculkan tombol pengalihan
+            else:
+                st.error("❌ Username atau Password salah! Silakan periksa kembali.")
+    else:
+        # Tampilan sukses setelah berhasil melewati pemeriksaan database
+        st.success("🎉 Verifikasi Akun Berhasil!")
+        
+        # TOMBOL PENGALIHAN REKAYASA (Aman dari blokir keamanan iframe)
+        # Target="_top" memaksa seluruh tab browser utama berpindah halaman
+        st.markdown("""
+            <div style="text-align: center; margin-top: 20px;">
+                <p style="color: #cbd5e1 !important; font-size: 15px; margin-bottom: 15px;">
+                    Akun kamu valid. Klik tombol di bawah ini untuk membuka lembar kerja produktivitasmu:
+                </p>
+                <a href="product.html" target="_top" style="
+                    display: block;
+                    width: 100%;
+                    background-color: #10b981;
+                    color: white !important;
+                    text-align: center;
+                    padding: 12px 20px;
+                    font-weight: 700;
+                    font-size: 16px;
+                    text-decoration: none;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+                    transition: background 0.2s;
+                ">
+                    Buka Zephyr Workspace Sekarang →
+                </a>
+            </div>
+        """, unsafe_allow_html=True)
 # ==================== 2. HALAMAN REGISTER ====================
 with tab_register:
     st.subheader("Buat Akun Baru")
