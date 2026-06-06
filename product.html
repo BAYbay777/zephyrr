@@ -117,7 +117,10 @@
                         <input type="number" id="timerInput" value="25" min="1">
                     </div>
                     <div id="timerDisplay" class="timer-display">25:00</div>
-                    <button id="timerBtn" class="btn" onclick="toggleTimer()">Mulai Hitung Mundur</button>
+                    <div style="display: flex; gap: 10px; margin-top: 15px; width: 100%;">
+                     <button id="timerBtn" class="btn" onclick="toggleTimer()" style="flex: 2; margin-top: 0;">Mulai Hitung Mundur</button>
+                     <button id="resetTimerBtn" class="btn" onclick="resetTimer()" style="flex: 1; margin-top: 0; background-color: #e2e8f0; color: #475569; border: 1px solid #cbd5e1;">Reset</button>
+                    </div>
                 </div>
 
                 <div class="card">
