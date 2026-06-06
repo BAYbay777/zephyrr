@@ -301,7 +301,23 @@
                 }, 1000);
             }
         }
-
+        function resetTimer() {
+           if (typeof timer !== 'undefined') clearInterval(timer);
+             if (typeof countdown !== 'undefined') clearInterval(countdown);
+                 const inputMinutes = document.getElementById('timerInput') ? parseInt(document.getElementById('timerInput').value) : 25;
+               if (typeof timeLeft !== 'undefined') timeLeft = inputMinutes * 60;
+                if (typeof totalSeconds !== 'undefined') totalSeconds = inputMinutes * 60;
+                   const display = document.getElementById('timerDisplay');
+              if (display) {display.innerText = String(inputMinutes).padStart(2, '0') + ":00";
+    }
+    
+    // 5. Kembalikan teks dan warna tombol utama seperti awal
+    const startBtn = document.getElementById('timerBtn');
+    if (startBtn) {
+        startBtn.innerText = "Mulai Hitung Mundur";
+        startBtn.style.backgroundColor = ""; // Mengembalikan ke warna CSS class 'btn' kamu
+    }
+}
         function updateTimerDisplay() {
             const m = Math.floor(timerSecondsLeft / 60); const s = timerSecondsLeft % 60;
             document.getElementById('timerDisplay').innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
