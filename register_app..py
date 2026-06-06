@@ -85,7 +85,6 @@ tab_login, tab_register = st.tabs(["🔒 Masuk (Login)", "📝 Daftar (Register)
 with tab_login:
     st.subheader("Masuk ke Workspace")
     
-    # Inisialisasi session state untuk mendeteksi status login sukses
     if "login_success" not in st.session_state:
         st.session_state.login_success = False
 
@@ -99,21 +98,19 @@ with tab_login:
             user_valid = check_user(login_user.strip(), login_pass)
             if user_valid:
                 st.session_state.login_success = True
-                st.rerun()  # Segarkan halaman untuk memunculkan tombol pengalihan
+                st.rerun()
             else:
                 st.error("❌ Username atau Password salah! Silakan periksa kembali.")
     else:
-        # Tampilan sukses setelah berhasil melewati pemeriksaan database
         st.success("🎉 Verifikasi Akun Berhasil!")
         
-        # TOMBOL PENGALIHAN REKAYASA (Aman dari blokir keamanan iframe)
-        # Target="_top" memaksa seluruh tab browser utama berpindah halaman
+        # --- PERBAIKAN LINK ABSOLUT GITHUB PAGES ---
         st.markdown("""
             <div style="text-align: center; margin-top: 20px;">
                 <p style="color: #cbd5e1 !important; font-size: 15px; margin-bottom: 15px;">
                     Akun kamu valid. Klik tombol di bawah ini untuk membuka lembar kerja produktivitasmu:
                 </p>
-                <a href="product.html" target="_top" style="
+                <a href="https://baybay777.github.io/zephyrr/product.html" target="_top" style="
                     display: block;
                     width: 100%;
                     background-color: #10b981;
