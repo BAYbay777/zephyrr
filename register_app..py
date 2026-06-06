@@ -104,6 +104,23 @@ with tab_login:
     else:
         st.success("🎉 Verifikasi Akun Berhasil!")
         
+        st.markdown("""
+            <div style="text-align: center; margin-top: 20px;">
+                <p style="color: #cbd5e1 !important; font-size: 15px; margin-bottom: 15px;">
+                    Akun kamu valid! Silakan klik tombol di bawah untuk masuk:
+                </p>
+            </div>
+        """, unsafe_allow_html=True)
+        
+        # Menggunakan tombol resmi Streamlit untuk memicu pengalihan aman
+        if st.button("🚀 Buka Zephyr Workspace Sekarang", key="btn_redirect_final"):
+            st.markdown("""
+                <script>
+                    // Mengirim sinyal aman keluar dari iframe menuju halaman auth.html
+                    window.parent.postMessage("login_sukses_redirect", "*");
+                </script>
+            """, unsafe_allow_html=True)
+        
         # --- PERBAIKAN LINK ABSOLUT GITHUB PAGES ---
         st.markdown("""
             <div style="text-align: center; margin-top: 20px;">
