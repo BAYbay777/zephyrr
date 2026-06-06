@@ -8,9 +8,12 @@
     
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 100%);
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --card-bg: rgba(30, 41, 59, 0.7);
             --primary-color: #38bdf8;
             --primary-hover: #0284c7;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -18,6 +21,7 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: var(--bg-gradient);
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -26,87 +30,166 @@
             position: relative;
         }
 
-        /* Tombol Kembali ke Home di Pojok Kiri Atas */
         .back-to-home {
             position: absolute;
             top: 30px;
             left: 40px;
             text-decoration: none;
-            color: #64748b;
+            color: var(--text-muted);
             font-weight: 600;
             font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
             transition: color 0.2s;
             z-index: 10;
         }
-        .back-to-home:hover {
-            color: var(--primary-hover);
-        }
+        .back-to-home:hover { color: var(--primary-color); }
 
-        .auth-wrapper {
+        .auth-container {
             width: 100%;
-            max-width: 480px;
-            height: 600px;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
+            max-width: 450px;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
             border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            overflow: hidden;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 2;
+        }
+
+        .tabs {
             display: flex;
-            flex-direction: column;
-            z-index: 2;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
         }
 
-        iframe {
-            width: 100%;
-            height: 100%;
+        .tab-btn {
+            flex: 1;
+            background: none;
             border: none;
-        }
-
-        /* Tombol bypass darurat di bawah kotak */
-        .bypass-container {
-            position: absolute;
-            bottom: 40px;
-            text-align: center;
-            z-index: 2;
-        }
-
-        .bypass-link {
-            font-size: 14px;
-            color: #64748b;
-            text-decoration: none;
-            font-weight: 500;
+            color: var(--text-muted);
+            font-size: 16px;
+            font-weight: 600;
+            padding: 10px 0;
+            cursor: pointer;
             transition: color 0.2s;
+            position: relative;
         }
 
-        .bypass-link:hover {
-            color: var(--primary-hover);
+        .tab-btn.active {
+            color: var(--primary-color);
         }
 
-        /* Dekorasi Teks Latar Belakang */
-        .bg-deco {
+        .tab-btn.active::after {
+            content: '';
             position: absolute;
-            font-size: 16vw;
-            font-weight: 800;
-            color: rgba(56, 189, 248, 0.03);
-            bottom: -5%;
-            right: 5%;
-            user-select: none;
-            z-index: 1;
+            bottom: -11px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary-color);
         }
+
+        .form-panel { display: none; }
+        .form-panel.active { display: block; }
+
+        h2 { font-size: 24px; margin-bottom: 8px; font-weight: 700; }
+        .subtitle { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: var(--text-muted); }
+        .input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 15px;
+            transition: border-color 0.2s;
+        }
+        .input-group input:focus { outline: none; border-color: var(--primary-color); }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-color);
+            color: #0f172a;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 10px;
+        }
+        .submit-btn:hover { background: var(--primary-hover); color: white; }
+
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: none;
+            font-weight: 500;
+        }
+        .message.error { background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #fca5a5; }
+        .message.success { background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #a7f3d0; }
+
+        .bypass-container { position: absolute; bottom: 40px; text-align: center; z-index: 2; width: 100%; }
+        .bypass-link { font-size: 14px; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .bypass-link:hover { color: var(--primary-color); }
+        .bg-deco { position: absolute; font-size: 16vw; font-weight: 800; color: rgba(56, 189, 248, 0.02); bottom: -5%; right: 5%; user-select: none; z-index: 1; }
     </style>
 </head>
 <body>
 
     <a href="index.html" class="back-to-home">← Kembali</a>
 
-    <div class="auth-wrapper">
-        <iframe 
-            src="https://zephyrr-jh7k28f4xsgg9i9juh8jff.streamlit.app/?embed=true">
-        </iframe>
+    <div class="auth-container">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('login')">🔒 Masuk</button>
+            <button class="tab-btn" onclick="switchTab('register')">📝 Daftar</button>
+        </div>
+
+        <div id="auth-msg" class="message"></div>
+
+        <div id="login-panel" class="form-panel active">
+            <h2>Masuk ke Workspace</h2>
+            <p class="subtitle">Silakan masukkan akun Zephyr Anda yang telah terdaftar.</p>
+            <form onsubmit="handleLogin(event)">
+                <div class="input-group">
+                    <label>Username</label>
+                    <input type="text" id="login-user" required placeholder="Masukkan username">
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="login-pass" required placeholder="Masukkan password">
+                </div>
+                <button type="submit" class="submit-btn">Masuk Sekarang</button>
+            </form>
+        </div>
+
+        <div id="register-panel" class="form-panel">
+            <h2>Buat Akun Baru</h2>
+            <p class="subtitle">Daftarkan username unik untuk mengamankan ruang kerja Anda.</p>
+            <form onsubmit="handleRegister(event)">
+                <div class="input-group">
+                    <label>Username Baru</label>
+                    <input type="text" id="reg-user" required placeholder="Contoh: baybay777">
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="reg-pass" required placeholder="Minimal 6 karakter">
+                </div>
+                <div class="input-group">
+                    <label>Konfirmasi Password</label>
+                    <input type="password" id="reg-confirm" required placeholder="Ketik ulang password">
+                </div>
+                <button type="submit" class="submit-btn">Daftar Akun</button>
+            </form>
+        </div>
     </div>
 
     <div class="bypass-container">
@@ -114,17 +197,93 @@
     </div>
     
     <div class="bg-deco">ZEPHYR</div>
-    <script>
-        window.addEventListener("message", function(event) {
-            // Memeriksa apakah pesan yang dikirim sesuai dengan instruksi login sukses
-            if (event.data === "login_sukses_redirect") {
-                // Lakukan pengalihan halaman secara instan dan aman dari sisi luar iframe
-                window.location.href = "product.html";
-            }
-        }, false);
-    </script>
-</body>
-</html>
 
+    <script>
+        // Inisialisasi basis data lokal menggunakan localStorage jika belum ada
+        if (!localStorage.getItem('zephyr_users')) {
+            localStorage.setItem('zephyr_users', JSON.stringify([]));
+        }
+
+        function switchTab(type) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.form-panel').forEach(panel => panel.classList.remove('active'));
+            hideMessage();
+
+            if (type === 'login') {
+                document.querySelectorAll('.tab-btn')[0].classList.add('active');
+                document.getElementById('login-panel').classList.add('active');
+            } else {
+                document.querySelectorAll('.tab-btn')[1].classList.add('active');
+                document.getElementById('register-panel').classList.add('active');
+            }
+        }
+
+        function showMessage(text, isError) {
+            const msgDiv = document.getElementById('auth-msg');
+            msgDiv.innerText = text;
+            msgDiv.className = isError ? 'message error' : 'message success';
+            msgDiv.style.display = 'block';
+        }
+
+        function hideMessage() {
+            document.getElementById('auth-msg').style.display = 'none';
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            hideMessage();
+            
+            const user = document.getElementById('login-user').value.trim();
+            const pass = document.getElementById('login-pass').value;
+            const users = JSON.parse(localStorage.getItem('zephyr_users'));
+
+            const foundUser = users.find(u => u.username === user && u.password === pass);
+
+            if (foundUser) {
+                showMessage("🎉 Login Berhasil! Mengalihkan ke Workspace...", false);
+                setTimeout(() => {
+                    window.location.href = "product.html";
+                }, 1000);
+            } else {
+                showMessage("❌ Username atau Password salah! Periksa kembali data Anda.", true);
+            }
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            hideMessage();
+
+            const user = document.getElementById('reg-user').value.strip ? document.getElementById('reg-user').value.strip() : document.getElementById('reg-user').value.trim();
+            const pass = document.getElementById('reg-pass').value;
+            const confirm = document.getElementById('reg-confirm').value;
+            const users = JSON.parse(localStorage.getItem('zephyr_users'));
+
+            if (user === "" || pass === "") {
+                showMessage("⚠️ Data tidak boleh kosong!", true);
+                return;
+            }
+            if (pass.length < 6) {
+                showMessage("🔒 Password minimal harus terdiri dari 6 karakter!", true);
+                return;
+            }
+            if (pass !== confirm) {
+                showMessage("❌ Konfirmasi password tidak cocok!", true);
+                return;
+            }
+
+            const userExists = users.some(u => u.username.toLowerCase() === user.toLowerCase());
+            if (userExists) {
+                showMessage("⚠️ Username tersebut sudah terdaftar! Gunakan nama lain.", true);
+                return;
+            }
+
+            // Simpan akun baru ke database lokal
+            users.push({ username: user, password: pass });
+            localStorage.setItem('zephyr_users', JSON.stringify(users));
+
+            showMessage("🎉 Akun berhasil dibuat! Silakan beralih ke tab 'Masuk'.", false);
+            e.target.reset();
+        }
+    </script>
 </body>
 </html>
