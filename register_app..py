@@ -1,26 +1,26 @@
 import streamlit as st
 import sqlite3
-import os
 
 # --- KONFIGURASI HALAMAN STREAMLIT ---
 st.set_page_config(
-    page_title="Zephyr Register System", 
-    page_icon="📝", 
+    page_title="Zephyr Auth System", 
+    page_icon="🔐", 
     layout="centered",
     initial_sidebar_state="collapsed"
 )
 
-# --- Sembunyikan Elemen Bawaan Streamlit (Header & Footer) ---
-# Ini sangat berguna agar saat di-embed via iframe di index.html terlihat bersih menyatu
+# --- GAYA CSS KUSTOM (Menyesuaikan Tema Gelap Estetik Zephyr) ---
 st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
-    .stApp {
-        background: transparent;
-    }
-    /* Kustomisasi gaya form agar estetik seperti tema Zephyr */
+    .stApp { background: transparent; }
+    
+    /* Mengubah warna teks deskripsi agar putih/terang di latar belakang gelap */
+    .stMarkdown p { color: #cbd5e1 !important; }
+    
+    /* Gaya tombol utama login/register */
     .stButton>button {
         width: 100%;
         background-color: #38bdf8;
@@ -33,17 +33,15 @@ st.markdown("""
     }
     .stButton>button:hover {
         background-color: #0284c7;
-        border: none;
         color: white;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# --- INITIALISASI DATABASE SQLITE ---
+# --- FUNGSI DATABASE SQLITE ---
 def init_db():
     conn = sqlite3.connect('zephyr_users.db')
     c = conn.cursor()
-    # Membuat tabel user jika belum ada
     c.execute('''
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -54,7 +52,6 @@ def init_db():
     conn.commit()
     conn.close()
 
-# Fungsi untuk menambahkan user baru ke database
 def add_user(username, password):
     try:
         conn = sqlite3.connect('zephyr_users.db')
@@ -64,42 +61,68 @@ def add_user(username, password):
         conn.close()
         return True
     except sqlite3.IntegrityError:
-        # Username sudah ada (Unique Constraint Voilation)
         return False
+
+def check_user(username, password):
+    conn = sqlite3.connect('zephyr_users.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password))
+    user = c.fetchone()
+    conn.close()
+    return user
 
 # Jalankan inisialisasi database
 init_db()
 
-# --- TAMPILAN ANTARMUKA REGISTRASI ---
-st.title("📝 Buat Akun Zephyr")
-st.write("Silakan daftarkan username unik kamu untuk ruang kerja produktivitas pribadi.")
+# --- ANTARMUKA UTAMA (TAB SYSTEM) ---
+st.title("✨ Selamat Datang di Zephyr")
+st.write("Silakan masuk ke akun kamu atau daftarkan akun baru untuk mengamankan ruang kerja produktivitas.")
 
-# Membuat Form Registrasi
-with st.form(key='register_form', clear_on_submit=True):
-    reg_user = st.text_input("Buat Username Baru", placeholder="Contoh: baybay777")
-    reg_pass = st.text_input("Buat Password Baru", type="password", placeholder="Masukkan password aman")
-    reg_pass_confirm = st.text_input("Konfirmasi Password Baru", type="password", placeholder="Ketik ulang password")
-    
-    submit_button = st.form_submit_button(label='Daftar Akun Baru')
+# Membuat Navigasi Tab Penuh untuk Login dan Register
+tab_login, tab_register = st.tabs(["🔒 Masuk (Login)", "📝 Daftar (Register)"])
 
-# --- LOGIKA VALIDASI PENDAFTARAN ---
-if submit_button:
-    # Hilangkan spasi di awal/akhir username
-    username_clean = reg_user.strip()
-    
-    if username_clean == "" or reg_pass == "":
-        st.error("⚠️ Username dan Password tidak boleh kosong!")
-    elif len(reg_pass) < 6:
-        st.warning("🔒 Password minimal harus terdiri dari 6 karakter!")
-    elif reg_pass != reg_pass_confirm:
-        st.error("❌ Konfirmasi password tidak cocok! Pastikan pengetikan sudah benar.")
-    else:
-        # Proses memasukkan data ke database SQLite
-        is_success = add_user(username_clean, reg_pass)
+# ==================== 1. HALAMAN LOGIN ====================
+with tab_login:
+    st.subheader("Masuk ke Workspace")
+    with st.form(key='login_form'):
+        login_user = st.text_input("Username", placeholder="Masukkan username kamu")
+        login_pass = st.text_input("Password", type="password", placeholder="Masukkan password")
+        login_submit = st.form_submit_button(label='Masuk Sekarang')
         
-        if is_success:
-            st.success(f"🎉 Akun dengan username **'{username_clean}'** berhasil dibuat!")
-            st.balloons()
-            st.info("💡 Sekarang kamu bisa menggunakan akun ini untuk login.")
+    if login_submit:
+        user_valid = check_user(login_user.strip(), login_pass)
+        if user_valid:
+            st.success(f"🎉 Selamat datang kembali, **{login_user}**! Mengalihkan ke Workspace...")
+            # JavaScript redirect untuk langsung otomatis memindahkan halaman iframe luar ke product.html
+            st.markdown("""
+                <script>
+                    window.top.location.href = "product.html";
+                </script>
+            """, unsafe_allow_html=True)
         else:
-            st.error("⚠️ Username tersebut sudah terdaftar! Silakan pilih nama lain.")
+            st.error("❌ Username atau Password salah! Silakan periksa kembali.")
+
+# ==================== 2. HALAMAN REGISTER ====================
+with tab_register:
+    st.subheader("Buat Akun Baru")
+    with st.form(key='register_form', clear_on_submit=True):
+        reg_user = st.text_input("Buat Username Baru", placeholder="Contoh: baybay777")
+        reg_pass = st.text_input("Buat Password Baru", type="password", placeholder="Minimal 6 karakter")
+        reg_pass_confirm = st.text_input("Konfirmasi Password Baru", type="password", placeholder="Ketik ulang password")
+        reg_submit = st.form_submit_button(label='Daftar Akun Baru')
+        
+    if reg_submit:
+        username_clean = reg_user.strip()
+        if username_clean == "" or reg_pass == "":
+            st.error("⚠️ Data tidak boleh kosong!")
+        elif len(reg_pass) < 6:
+            st.warning("🔒 Password minimal harus 6 karakter!")
+        elif reg_pass != reg_pass_confirm:
+            st.error("❌ Konfirmasi password tidak cocok!")
+        else:
+            is_success = add_user(username_clean, reg_pass)
+            if is_success:
+                st.success(f"🎉 Akun **'{username_clean}'** berhasil dibuat! Silakan pindah ke tab 'Masuk' untuk login.")
+                st.balloons()
+            else:
+                st.error("⚠️ Username tersebut sudah terdaftar! Gunakan nama lain.")
