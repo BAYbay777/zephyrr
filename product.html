@@ -301,18 +301,28 @@
                 }, 1000);
             }
         }
-        function resetTimer() {
-           if (typeof timer !== 'undefined') clearInterval(timer);
-             if (typeof countdown !== 'undefined') clearInterval(countdown);
-                 const inputMinutes = document.getElementById('timerInput') ? parseInt(document.getElementById('timerInput').value) : 25;
-               if (typeof timeLeft !== 'undefined') timeLeft = inputMinutes * 60;
-                if (typeof totalSeconds !== 'undefined') totalSeconds = inputMinutes * 60;
-                   const display = document.getElementById('timerDisplay');
-              if (display) {display.innerText = String(inputMinutes).padStart(2, '0') + ":00"; }
-               const startBtn = document.getElementById('timerBtn');
+      function resetTimer() {
+    // 1. Hentikan hitungan mundur secara total menggunakan variabel asli kamu
+    clearInterval(timerInterval);
+    isTimerRunning = false;
+    
+    // 2. Ambil nilai menit terbaru dari kotak input 'timerInput'
+    const inputMinutes = document.getElementById('timerInput') ? parseInt(document.getElementById('timerInput').value) : 25;
+    
+    // 3. Kembalikan isi sisa detik waktu berjalan ke hitungan menit awal
+    timerSecondsLeft = inputMinutes * 60;
+    
+    // 4. Perbarui visual teks jam di layar ke posisi awal (misal 25:00)
+    const display = document.getElementById('timerDisplay');
+    if (display) {
+        display.innerText = String(inputMinutes).padStart(2, '0') + ":00";
+    }
+    
+    // 5. Kembalikan teks tombol utama menjadi sedia kala
+    const startBtn = document.getElementById('timerBtn');
     if (startBtn) {
         startBtn.innerText = "Mulai Hitung Mundur";
-        startBtn.style.backgroundColor = ""; // Mengembalikan ke warna CSS class 'btn'
+        startBtn.style.backgroundColor = ""; // Mengembalikan warna ke setelan CSS awal (.btn)
     }
 }
         function updateTimerDisplay() {
