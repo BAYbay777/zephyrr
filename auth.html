@@ -114,6 +114,17 @@
     </div>
     
     <div class="bg-deco">ZEPHYR</div>
+    <script>
+        window.addEventListener("message", function(event) {
+            // Memeriksa apakah pesan yang dikirim sesuai dengan instruksi login sukses
+            if (event.data === "login_sukses_redirect") {
+                // Lakukan pengalihan halaman secara instan dan aman dari sisi luar iframe
+                window.location.href = "product.html";
+            }
+        }, false);
+    </script>
+</body>
+</html>
 
 </body>
 </html>
